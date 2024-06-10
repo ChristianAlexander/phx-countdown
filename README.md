@@ -1,5 +1,11 @@
 # Countdown
 
+A sample application demonstrating Phoenix LiveView and hooks.
+
+The companion repository to a YouTube video:
+
+[![Watch the video](https://img.youtube.com/vi/YFBg5NNEW4g/maxresdefault.jpg)](https://youtu.be/YFBg5NNEW4g)
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies
