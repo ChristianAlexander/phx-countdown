@@ -1,0 +1,28 @@
+<.header>
+  Timer <%= @timer.id %>
+  <:subtitle>This is a timer record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/timers/#{@timer}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit timer</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @timer.name %></:item>
+  <:item title="End at"><%= @timer.end_at %></:item>
+  <:item title="Ends in"><.countdown_timer timer={@timer} /></:item>
+</.list>
+
+<.back navigate={~p"/timers"}>Back to timers</.back>
+
+<.modal :if={@live_action == :edit} id="timer-modal" show on_cancel={JS.patch(~p"/timers/#{@timer}")}>
+  <.live_component
+    module={CountdownWeb.TimerLive.FormComponent}
+    id={@timer.id}
+    title={@page_title}
+    action={@live_action}
+    timer={@timer}
+    patch={~p"/timers/#{@timer}"}
+  />
+</.modal>

@@ -1,0 +1,43 @@
+<.header>
+  Listing Timers
+  <:actions>
+    <.link patch={~p"/timers/new"}>
+      <.button>New Timer</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="timers"
+  rows={@streams.timers}
+  row_click={fn {_id, timer} -> JS.navigate(~p"/timers/#{timer}") end}
+>
+  <:col :let={{_id, timer}} label="Name"><%= timer.name %></:col>
+  <:col :let={{_id, timer}} label="End at"><%= timer.end_at %></:col>
+  <:col :let={{_id, timer}} label="Ends in"><.countdown_timer timer={timer} /></:col>
+  <:action :let={{_id, timer}}>
+    <div class="sr-only">
+      <.link navigate={~p"/timers/#{timer}"}>Show</.link>
+    </div>
+    <.link patch={~p"/timers/#{timer}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, timer}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: timer.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="timer-modal" show on_cancel={JS.patch(~p"/timers")}>
+  <.live_component
+    module={CountdownWeb.TimerLive.FormComponent}
+    id={@timer.id || :new}
+    title={@page_title}
+    action={@live_action}
+    timer={@timer}
+    patch={~p"/timers"}
+  />
+</.modal>
